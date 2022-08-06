@@ -24,20 +24,18 @@ extension String {
         if term.isEmpty || isEmpty { return  0 }
         
         let alphaNum = CharacterSet.alphanumerics
-        let whitespace = CharacterSet.whitespaces
-        
+
         // location in the term string
         let termScalars = term.unicodeScalars
         var index = termScalars.startIndex
         let end = termScalars.endIndex
         
-        var waitingForSpace = false
         var penalty = 0
         for c in self.unicodeScalars {
             // advance through all characters in self
             // when we hit a anchor character, match
             // against the term and if it matches
-            if alphaNum.contains(c), !waitingForSpace {
+            if alphaNum.contains(c) {
                 // if we hit a anchor, check if it matches
                 // current term scalar
                 if termScalars[index] == c {
@@ -49,10 +47,6 @@ extension String {
                 else {
                     penalty += 2 // how far away did we start off matching
                 }
-                waitingForSpace = true
-            }
-            else if waitingForSpace, whitespace.contains(c) {
-                waitingForSpace = false
             }
         }
         
